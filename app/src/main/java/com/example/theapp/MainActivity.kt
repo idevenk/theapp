@@ -100,27 +100,38 @@ fun LuminousScreen() {
         ) {
             // Header
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("LuminousWear", color = Color.White, fontSize = 18.sp, fontFamily = PixelFont)
+                Text("LuminousWear", color = Color.White, fontSize = 16.sp, fontFamily = PixelFont)
 
                 // History Calendar
-                Text(timeDisplay, color = Color.White, fontSize = 18.sp, fontFamily = PixelFont,
+                Text(timeDisplay, color = Color.White, fontSize = 16.sp, fontFamily = PixelFont,
                     modifier = Modifier.clickable {
                         showHistoryCalendar(context, prefs)
                     })
             }
+            Spacer(modifier =  Modifier.height(7.dp))
                 //show quote
             Text(text = randomQuote, color = Color.White, textAlign = TextAlign.Center,
-                style = TextStyle(fontFamily = CursiveFont, fontSize = 48.sp))
+                style = TextStyle(fontFamily = CursiveFont, fontSize = 30.sp))
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(7.dp))
 
             // SLIDER text in
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(340.dp)) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(320.dp)) {
                 CustomSunSlider(angle = rotationAngle, onAngleChange = { rotationAngle = it })
                 Text("$percentage%", color = Color(0xFBC9CFFF), fontSize = 32.sp, fontFamily = PixelFont)
             }
+            Text(text = "Not Connected", color = Color.White, textAlign = TextAlign.Center,
+                style = TextStyle(fontFamily = PixelFont, fontSize = 23.sp))
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier =  Modifier.height(7.dp))
+
+            Button(
+                onClick = { /* Bluetooth Logic */ },
+                modifier = Modifier.width(230.dp).height(44.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                shape = RoundedCornerShape(4.dp)
+            ) {
+                Text("CONNECT TO DEVICE", color = Color.Black, fontFamily = PixelFont, fontSize = 13.sp)
 
             // COMMUNITY
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -128,21 +139,14 @@ fun LuminousScreen() {
                 IconButton(onClick = { isChatOpen = true }) {
                     Icon(painter = painterResource(id = R.drawable.ic_chat), contentDescription = null, tint = Color(
                         0xFFFFFFFF
-                    ), modifier = Modifier.size(26.dp))
+                    ), modifier = Modifier.size(5.dp))
                 }
             }
             UserChatRow(UserProfile("NewUser", false), "Hi!")
             UserChatRow(UserProfile("LumRep", true), "How can I help you?")
 
-            Spacer(modifier = Modifier.height(5.dp))
 
-            Button(
-                onClick = { /* Bluetooth Logic */ },
-                modifier = Modifier.width(240.dp).height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                shape = RoundedCornerShape(4.dp)
-            ) {
-                Text("CONNECT TO DEVICE", color = Color.Black, fontFamily = PixelFont, fontSize = 13.sp)
+
             }
         }
     }
@@ -151,7 +155,7 @@ fun LuminousScreen() {
 // HISTORY CALENDAR function
 fun showHistoryCalendar(context: Context, prefs: android.content.SharedPreferences) {
     val c = Calendar.getInstance()
-    val dialog = DatePickerDialog(context, R.style.Theme_Theapp, { _, year, month, day ->
+    val dialog = DatePickerDialog(context, R.style.CustomDatePickerDialog, { _, year, month, day ->
         // Create the key for the selected date
         val selectedDate = "$year-${String.format("%02d", month + 1)}-${String.format("%02d", day)}"
         val savedSeconds = prefs.getLong(selectedDate, 0L)
@@ -201,12 +205,12 @@ fun CustomSunSlider(angle: Float, onAngleChange: (Float) -> Unit) {
         }
         //
         Box(modifier = Modifier.graphicsLayer {
-            val orbit = 145.dp.toPx()
+            val orbit = 100.dp.toPx()
             translationX = orbit * cos(Math.toRadians(angle.toDouble())).toFloat()
             translationY = orbit * sin(Math.toRadians(angle.toDouble())).toFloat()
             rotationZ = angle
         }, contentAlignment = Alignment.Center) {
-            Box(modifier = Modifier.size(140.dp).background(Brush.radialGradient(listOf(Color(0xFFBC9CFF).copy(0.6f), Color.Transparent)), CircleShape))
+            Box(modifier = Modifier.size(160.dp).background(Brush.radialGradient(listOf(Color(0xFFBC9CFF).copy(0.6f), Color.Transparent)), CircleShape))
             Image(painter = sunImage, contentDescription = null, modifier = Modifier.size(110.dp))
         }
     }
@@ -225,7 +229,7 @@ fun UserChatRow(user: UserProfile, message: String) {
 //chat function window
 @Composable
 fun FullChatView(onBack: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF0B071E)).padding(24.dp)) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF322941)).padding(24.dp)) {
         Text("← BACK", color = Color.White, fontFamily = PixelFont, modifier = Modifier.clickable { onBack() })
         Spacer(modifier = Modifier.height(20.dp))
         Text("GLOBAL CHAT", color = Color.White, fontFamily = PixelFont, fontSize = 24.sp)
